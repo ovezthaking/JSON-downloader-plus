@@ -1,8 +1,9 @@
 import requests
 import json
+import time
 
 
-url = 'htstps://jsonplaceholder.typicode.com/posts'
+url = 'https://jsonplaceholder.typicode.com/posts'
 
 
 def get_post(index):
@@ -17,14 +18,20 @@ def get_post(index):
         return response.json()
 
 
-def save_json(title='', body=''):
-    title = input('Type the title')
-    body = input('Type the content')
+def save_file(filename, title='', body=''):
+    if not title and not body:
+        title = input('Type the title')
+        body = input('Type the content')
+    elif not title and body:
+        title = input('Type the title')
+    elif not body and title:
+        body = input('Type the content')
 
+    now = str(time.time())[:12].replace('.', '')
     payload = {"title": title, "body": body, "userId": 1}
 
     try:
-        file = open('post.json', 'w')
+        file = open(f'{filename}_{now}', 'w')
         file.write(json.dumps(payload, indent=2))
     except Exception as e:
         return f'Error: {e}'
@@ -32,11 +39,36 @@ def save_json(title='', body=''):
         file.close()
 
 
-def create_post(u_file):
-    
+def save_json(filename, get_payload):
+
+    now = str(time.time())[:12].replace('.', '')
+    payload = get_payload
+
+    try:
+        file = open(f'{filename}_{now}.json', 'w')
+        file.write(json.dumps(payload, indent=2))
+    except Exception as e:
+        return f'Error: {e}'
+    finally:
+        file.close()
+
+
+def read_post(filename):
+    try:
+        file = open(filename, 'r')
+        file.read()
+    except Exception as e:
+        raise f'Error: {e}'
+    finally:
+        file.close()
+
+    return file.read()
+
+
+def create_post(filename):
     requests.post()
 
 
-print(get_post(2))
-
-save_json()
+if __name__ == '__main__':
+    print(get_post(2))
+    save_json('jsonplaceh', get_post(3))
