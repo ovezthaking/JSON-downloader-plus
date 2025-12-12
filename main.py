@@ -48,27 +48,44 @@ def save_json(filename, get_payload):
         file = open(f'{filename}_{now}.json', 'w')
         file.write(json.dumps(payload, indent=2))
     except Exception as e:
-        return f'Error: {e}'
+        raise f'Error: {e}'
     finally:
         file.close()
 
 
-def read_post(filename):
+def read_file(filename):
     try:
         file = open(filename, 'r')
-        file.read()
+        content = json.load(file)
     except Exception as e:
         raise f'Error: {e}'
     finally:
         file.close()
 
-    return file.read()
+    return content
 
 
-def create_post(filename):
-    requests.post()
+def upload_post(filename):
+    try:
+        file = open(filename, 'r')
+        payload = json.load(file)
+    except Exception as e:
+        raise f'Error: {e}'
+    finally:
+        file.close()
+
+    try:
+        res = requests.post(url, json=payload)
+    except Exception as e:
+        raise f'Error:{e}'
+
+    if not res.status_code >= 200 and not res.status_code < 300:
+        raise f'Error status code: {res.status_code}'
+    return res
 
 
 if __name__ == '__main__':
-    print(get_post(2))
-    save_json('jsonplaceh', get_post(3))
+    # print(get_post(2))
+    # save_json('jsonplaceh', get_post(3))
+    # print(read_file('jsonplaceh_17655012183.json'))
+    print(upload_post('post.json'))
