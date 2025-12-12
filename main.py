@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import subprocess
 
 
 url = 'https://jsonplaceholder.typicode.com/posts'
@@ -107,8 +108,9 @@ def search_log(keyword):
 
 
 if __name__ == '__main__':
-    # print(get_post(2))
-    # save_json('jsonplaceh', get_post(3))
+    print(get_post(1))
+    save_json('jsonplaceh', get_post(3))
     print(read_file('jsonplaceh_17655012183.json'))
     print(upload_post('post.json'))
     search_log('Error')
+    subprocess.run(["python", "--version"])
